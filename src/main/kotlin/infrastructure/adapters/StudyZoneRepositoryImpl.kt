@@ -1,5 +1,6 @@
 package com.sylvara.infrastructure.adapters
 
+import com.sylvara.data.postgres.SpeciesZoneTable
 import com.sylvara.data.postgres.StudyZoneTable
 import com.sylvara.domain.models.StudyZone
 import com.sylvara.domain.ports.StudyZoneRepository
@@ -72,6 +73,15 @@ class StudyZoneRepositoryImpl : StudyZoneRepository {
     override suspend fun delete(id: Int) {
         transaction {
             StudyZoneTable.deleteWhere { StudyZoneTable.id eq id }
+        }
+    }
+
+    override suspend fun countSpeciesInZone(studyZoneId: Int): Int {
+        return transaction {
+            SpeciesZoneTable.selectAll()
+                .where { SpeciesZoneTable.studyZoneId eq studyZoneId }
+                .count()
+                .toInt()
         }
     }
 }

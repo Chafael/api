@@ -9,4 +9,6 @@ interface StudyZoneRepository {
     suspend fun findAll(): List<StudyZone>
     suspend fun update(studyZone: StudyZone): StudyZone
     suspend fun delete(id: Int)
+    suspend fun countSpeciesInZone(studyZoneId: Int): Int
+
 }

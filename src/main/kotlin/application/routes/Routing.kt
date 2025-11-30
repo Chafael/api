@@ -25,5 +25,9 @@ fun Application.configureRouting(
         functionalTypeRoutes(functionalTypeService)
         speciesRoutes(speciesService)
         speciesZoneRoutes(speciesZoneService)
+        projectDetailsRoutes(projectService, studyZoneService)
+        studyZoneDetailsRoutes(studyZoneService)
+        biodiversityAnalysisRoutes(studyZoneService)
+        speciesRegistryRoutes(speciesService)
     }
 }

@@ -1,10 +1,17 @@
 package com.sylvara.application.services
 
-import com.sylvara.domain.models.Species
+import com.sylvara.domain.models.*
+import com.sylvara.domain.ports.FunctionalTypeRepository
 import com.sylvara.domain.ports.SpeciesRepository
+import com.sylvara.domain.ports.SpeciesZoneRepository
 import io.ktor.server.plugins.*
+import java.time.LocalDateTime
 
-class SpeciesService(private val speciesRepository: SpeciesRepository) {
+class SpeciesService(
+    private val speciesRepository: SpeciesRepository,
+    private val speciesZoneRepository: SpeciesZoneRepository,
+    private val functionalTypeRepository: FunctionalTypeRepository
+) {
 
     suspend fun createSpecies(species: Species): Species {
         if (species.speciesName.isBlank()) {
@@ -40,5 +47,88 @@ class SpeciesService(private val speciesRepository: SpeciesRepository) {
             throw NotFoundException("Especie con ID $id no existe")
         }
         speciesRepository.delete(id)
+    }
+
+    // Crear especie completa con relación a zona
+    suspend fun createCompleteSpecies(request: CreateSpeciesRequest): Pair<Species, SpeciesZone> {
+        // Validar tipo funcional existe
+        val functionalType = functionalTypeRepository.findById(request.functionalTypeId)
+            ?: throw NotFoundException("Tipo funcional con ID ${request.functionalTypeId} no encontrado")
+
+        // Crear especie
+        val newSpecies = Species(
+            projectId = request.projectId,
+            speciesName = request.speciesName,
+            speciesPhoto = request.speciesPhoto,
+            functionalTypeId = request.functionalTypeId
+        )
+        val savedSpecies = speciesRepository.save(newSpecies)
+
+        // Crear relación con zona
+        val speciesZone = SpeciesZone(
+            speciesId = savedSpecies.speciesId,
+            studyZoneId = request.studyZoneId,
+            samplingUnit = request.samplingUnit,
+            individualCount = request.individualCount,
+            heightStratum = request.heightStratum
+        )
+        val savedZone = speciesZoneRepository.save(speciesZone)
+
+        return Pair(savedSpecies, savedZone)
+    }
+
+    //  Obtener detalles de especies por zona
+    suspend fun getSpeciesDetailsByZone(studyZoneId: Int): List<SpeciesDetail> {
+        val speciesZones = speciesZoneRepository.findByStudyZoneId(studyZoneId)
+
+        return speciesZones.map { sz ->
+            val species = speciesRepository.findById(sz.speciesId)
+                ?: throw NotFoundException("Especie con ID ${sz.speciesId} no encontrada")
+
+            val functionalType = functionalTypeRepository.findById(species.functionalTypeId)
+                ?: throw NotFoundException("Tipo funcional no encontrado")
+
+            SpeciesDetail(
+                speciesId = species.speciesId,
+                speciesName = species.speciesName,
+                speciesPhoto = species.speciesPhoto,
+                functionalTypeName = functionalType.functionalTypeName,
+                samplingUnit = sz.samplingUnit,
+                individualCount = sz.individualCount,
+                heightStratum = sz.heightStratum
+            )
+        }
+    }
+
+    //  Actualizar especie y su relación con zona
+    suspend fun updateCompleteSpecies(
+        speciesId: Int,
+        studyZoneId: Int,
+        request: UpdateSpeciesRequest
+    ): Pair<Species, SpeciesZone> {
+        val existingSpecies = speciesRepository.findById(speciesId)
+            ?: throw NotFoundException("Especie con ID $speciesId no encontrada")
+
+        // Actualizar especie
+        val updatedSpecies = existingSpecies.copy(
+            speciesName = request.speciesName,
+            speciesPhoto = request.speciesPhoto,
+            functionalTypeId = request.functionalTypeId
+        )
+        val savedSpecies = speciesRepository.update(updatedSpecies)
+
+        // Buscar y actualizar relación con zona
+        val speciesZones = speciesZoneRepository.findBySpeciesId(speciesId)
+        val existingZone = speciesZones.find { it.studyZoneId == studyZoneId }
+            ?: throw NotFoundException("Relación especie-zona no encontrada")
+
+        val updatedZone = existingZone.copy(
+            samplingUnit = request.samplingUnit,
+            individualCount = request.individualCount,
+            heightStratum = request.heightStratum
+        )
+        val savedZone = speciesZoneRepository.update(updatedZone)
+
+        return Pair(savedSpecies, savedZone)
     }
 }
