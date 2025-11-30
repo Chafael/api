@@ -25,15 +25,15 @@ fun Application.module() {
     val speciesRepository = SpeciesRepositoryImpl()
     val speciesZoneRepository = SpeciesZoneRepositoryImpl()
 
-    // 3. Crear TODOS los servicios (ACTUALIZADO: ProjectService ahora recibe studyZoneRepository)
+    // 3. Crear TODOS los servicios (ACTUALIZADOS con dependencias)
     val userService = UserService(userRepository)
     val projectService = ProjectService(projectRepository, studyZoneRepository)
-    val studyZoneService = StudyZoneService(studyZoneRepository)
+    val studyZoneService = StudyZoneService(studyZoneRepository, speciesZoneRepository)
     val functionalTypeService = FunctionalTypeService(functionalTypeRepository)
-    val speciesService = SpeciesService(speciesRepository)
+    val speciesService = SpeciesService(speciesRepository, speciesZoneRepository, functionalTypeRepository)
     val speciesZoneService = SpeciesZoneService(speciesZoneRepository)
 
-    // 4. Configurar rutas pasando TODOS los servicios
+    // 4. Configurar rutas
     configureRouting(
         userService,
         projectService,
