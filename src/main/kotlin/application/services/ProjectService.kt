@@ -1,10 +1,16 @@
 package com.sylvara.application.services
 
+import com.sylvara.domain.models.ActiveProjectInfo
+import com.sylvara.domain.models.HomeStats
 import com.sylvara.domain.models.Project
 import com.sylvara.domain.ports.ProjectRepository
+import com.sylvara.domain.ports.StudyZoneRepository
 import io.ktor.server.plugins.*
 
-class ProjectService(private val projectRepository: ProjectRepository) {
+class ProjectService(
+    private val projectRepository: ProjectRepository,
+    private val studyZoneRepository: StudyZoneRepository
+) {
 
     suspend fun createProject(project: Project): Project {
         if (project.projectName.isBlank()) {
@@ -40,5 +46,25 @@ class ProjectService(private val projectRepository: ProjectRepository) {
             throw NotFoundException("Proyecto con ID $id no existe")
         }
         projectRepository.delete(id)
+    }
+
+    // Nuevo metodo para home
+    suspend fun getHomeStats(): HomeStats {
+        val activeProjects = projectRepository.findActiveProjects()
+
+        val activeProjectsInfo = activeProjects.map { project ->
+            val studyZones = studyZoneRepository.findByProjectId(project.projectId)
+            ActiveProjectInfo(
+                projectName = project.projectName,
+                projectStatus = project.projectStatus,
+                totalStudyZones = studyZones.size
+            )
+        }
+
+        return HomeStats(
+            activeProjects = activeProjectsInfo,
+            totalProjects = projectRepository.countAll(),
+            monthlyProjects = projectRepository.countThisMonth()
+        )
     }
 }

@@ -5,7 +5,9 @@ import com.sylvara.domain.models.Project
 import com.sylvara.domain.ports.ProjectRepository
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.LocalDateTime
 
 class ProjectRepositoryImpl : ProjectRepository {
 
@@ -72,6 +74,31 @@ class ProjectRepositoryImpl : ProjectRepository {
     override suspend fun delete(id: Int) {
         transaction {
             ProjectTable.deleteWhere { ProjectTable.id eq id }
+        }
+    }
+
+    // IMPLEMENTACIÓN DE NUEVOS MÉTODOS
+    override suspend fun findActiveProjects(): List<Project> {
+        return transaction {
+            ProjectTable.selectAll()
+                .where { ProjectTable.status eq "activo" }
+                .map { rowToProject(it) }
+        }
+    }
+
+    override suspend fun countAll(): Int {
+        return transaction {
+            ProjectTable.selectAll().count().toInt()
+        }
+    }
+
+    override suspend fun countThisMonth(): Int {
+        return transaction {
+            val firstDayOfMonth = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0)
+            ProjectTable.selectAll()
+                .where { ProjectTable.createdAt greaterEq firstDayOfMonth }
+                .count()
+                .toInt()
         }
     }
 }

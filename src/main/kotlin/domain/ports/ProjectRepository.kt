@@ -9,4 +9,7 @@ interface ProjectRepository {
     suspend fun findAll(): List<Project>
     suspend fun update(project: Project): Project
     suspend fun delete(id: Int)
+    suspend fun findActiveProjects(): List<Project>
+    suspend fun countAll(): Int
+    suspend fun countThisMonth(): Int
 }
