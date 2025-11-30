@@ -18,6 +18,7 @@ fun Application.configureRouting(
     speciesZoneService: SpeciesZoneService
 ) {
     routing {
+        homeRoutes(projectService)
         userRoutes(userService)
         projectRoutes(projectService)
         studyZoneRoutes(studyZoneService)
