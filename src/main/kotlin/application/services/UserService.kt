@@ -1,8 +1,11 @@
 package com.sylvara.application.services
 
 import com.sylvara.domain.models.User
+import com.sylvara.domain.models.UserProfile
 import com.sylvara.domain.ports.UserRepository
-import io.ktor.server.plugins.* // Para NotFoundException y BadRequestException
+import io.ktor.server.plugins.*
+import java.time.LocalDate
+import java.time.Period
 
 class UserService(private val userRepository: UserRepository) {
 
@@ -60,5 +63,26 @@ class UserService(private val userRepository: UserRepository) {
             throw NotFoundException("No se puede borrar. Usuario con ID $id no existe.")
         }
         userRepository.delete(id)
+    }
+    // NUEVO: Obtener perfil de usuario
+    suspend fun getUserProfile(userId: Int): UserProfile {
+        val user = userRepository.findById(userId)
+            ?: throw NotFoundException("Usuario con ID $userId no encontrado")
+
+        val age = calculateAge(user.userBirthday)
+
+        return UserProfile(
+            userId = user.userId,
+            fullName = "${user.userName} ${user.userLastname}",
+            biography = user.biography,
+            email = user.userEmail,
+            age = age,
+            birthday = user.userBirthday
+        )
+    }
+
+    // NUEVO: Calcular edad
+    private fun calculateAge(birthDate: LocalDate): Int {
+        return Period.between(birthDate, LocalDate.now()).years
     }
 }

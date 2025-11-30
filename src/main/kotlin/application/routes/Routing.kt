@@ -29,5 +29,7 @@ fun Application.configureRouting(
         studyZoneDetailsRoutes(studyZoneService)
         biodiversityAnalysisRoutes(studyZoneService)
         speciesRegistryRoutes(speciesService)
+        userConfigurationRoutes(userService)
+
     }
 }
