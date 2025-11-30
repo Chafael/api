@@ -7,7 +7,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
-
 class UserRepositoryImpl : UserRepository {
     // Mapper
     private fun rowToUser(row: ResultRow): User {
@@ -18,28 +17,27 @@ class UserRepositoryImpl : UserRepository {
             userBirthday = row[UserTable.birthday],
             userEmail = row[UserTable.email],
             userPassword = row[UserTable.password],
+            biography = row[UserTable.biography], // NUEVO CAMPO
             createdAt = row[UserTable.createdAt]
         )
     }
 
-    // 1. SAVE (Corregido: Usamos UserTable.campo)
     override suspend fun save(user: User): User {
         return transaction {
-            val insertStatemen = UserTable.insert {
+            val insertStatement = UserTable.insert {
                 it[UserTable.name] = user.userName
                 it[UserTable.lastname] = user.userLastname
                 it[UserTable.birthday] = user.userBirthday
                 it[UserTable.email] = user.userEmail
                 it[UserTable.password] = user.userPassword
+                it[UserTable.biography] = user.biography // NUEVO CAMPO
             }
 
-            val newId = insertStatemen[UserTable.id]
-
+            val newId = insertStatement[UserTable.id]
             user.copy(userId = newId)
         }
     }
 
-    // 2. FIND BY ID
     override suspend fun findById(id: Int): User? {
         return transaction {
             UserTable.selectAll()
@@ -49,7 +47,6 @@ class UserRepositoryImpl : UserRepository {
         }
     }
 
-    // 3. FIND BY EMAIL
     override suspend fun findByEmail(email: String): User? {
         return transaction {
             UserTable.selectAll()
@@ -59,7 +56,6 @@ class UserRepositoryImpl : UserRepository {
         }
     }
 
-    // 4. FIND ALL
     override suspend fun findAll(): List<User> {
         return transaction {
             UserTable.selectAll()
@@ -67,7 +63,6 @@ class UserRepositoryImpl : UserRepository {
         }
     }
 
-    // 5. UPDATE
     override suspend fun update(user: User): User {
         return transaction {
             UserTable.update({ UserTable.id eq user.userId }) {
@@ -76,6 +71,7 @@ class UserRepositoryImpl : UserRepository {
                 it[UserTable.birthday] = user.userBirthday
                 it[UserTable.email] = user.userEmail
                 it[UserTable.password] = user.userPassword
+                it[UserTable.biography] = user.biography // NUEVO CAMPO
             }
 
             user.copy(userId = user.userId)

@@ -26,6 +26,8 @@ data class User(
 
     val userEmail: String,
     val userPassword: String,
+    val biography: String? = null,
+
 
     // 3. Conectamos el serializador de LocalDateTime y lo hacemos nullable
     // para que use el default de la base de datos si no viene en el JSON.
