@@ -6,6 +6,7 @@ import com.sylvara.domain.models.RegisterRequest
 import com.sylvara.domain.models.User
 import com.sylvara.domain.ports.UserRepository
 import com.sylvara.infrastructure.security.JwtConfig
+import com.sylvara.infrastructure.security.PasswordHasher  // ← AÑADE ESTE IMPORT
 import io.ktor.server.plugins.*
 
 class AuthService(private val userRepository: UserRepository) {
@@ -14,7 +15,7 @@ class AuthService(private val userRepository: UserRepository) {
         val user = userRepository.findByEmail(request.email)
             ?: throw NotFoundException("Email o contraseña incorrecta")
 
-        if (user.userPassword != request.password) {
+        if (!PasswordHasher.checkPassword(request.password, user.userPassword)) {
             throw IllegalArgumentException("Email o contraseña incorrecta")
         }
 
@@ -33,12 +34,14 @@ class AuthService(private val userRepository: UserRepository) {
             throw IllegalArgumentException("El email ya está registrado")
         }
 
+        val hashedPassword = PasswordHasher.hashPassword(request.userPassword)
+
         val newUser = User(
             userName = request.userName,
             userLastname = request.userLastname,
             userBirthday = request.userBirthday,
             userEmail = request.userEmail,
-            userPassword = request.userPassword,
+            userPassword = hashedPassword,  // ← Guardar hash, no texto plano
             biography = request.biography
         )
 

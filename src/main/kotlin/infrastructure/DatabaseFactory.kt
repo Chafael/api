@@ -27,9 +27,9 @@ object DatabaseFactory {
     private fun hikari(): HikariDataSource {
         val config = HikariConfig()
         config.driverClassName = "org.postgresql.Driver"
-        config.jdbcUrl = "jdbc:postgresql://localhost:5432/postgres"
+        config.jdbcUrl = "jdbc:postgresql://localhost:5432/sylvara_db"
         config.username = "postgres"
-        config.password = "password"
+        config.password = "ajstyles2006"
         config.maximumPoolSize = 3
         config.isAutoCommit = false
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
