@@ -36,4 +36,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.postgresql:postgresql:42.7.2")
+
+    implementation("org.mindrot:jbcrypt:0.4")
 }
