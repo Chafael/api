@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
     implementation(libs.ktor.server.config.yaml)
+    implementation("io.ktor:ktor-server-cors:3.3.2")
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 
@@ -38,4 +39,6 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.2")
 
     implementation("org.mindrot:jbcrypt:0.4")
+
+
 }
