@@ -3,6 +3,7 @@ package com.sylvara
 import com.sylvara.application.services.*
 import com.sylvara.infrastructure.DatabaseFactory
 import com.sylvara.infrastructure.adapters.*
+import com.sylvara.infrastructure.plugins.configureSecurity
 import com.sylvara.infrastructure.plugins.configureSerialization
 import com.sylvara.plugins.configureRouting
 import io.ktor.server.application.*
@@ -13,6 +14,7 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     configureSerialization()
+    configureSecurity()
 
     // 1. Inicializar base de datos
     DatabaseFactory.init()
