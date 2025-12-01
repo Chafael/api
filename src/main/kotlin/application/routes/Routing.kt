@@ -3,6 +3,7 @@ package com.sylvara.plugins
 import com.sylvara.application.routes.*
 import com.sylvara.application.services.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.authenticate
 import io.ktor.server.routing.*
 
 /**
@@ -10,6 +11,7 @@ import io.ktor.server.routing.*
  * Este archivo actúa como orquestador que delega a cada módulo de rutas.
  */
 fun Application.configureRouting(
+    authService: AuthService,
     userService: UserService,
     projectService: ProjectService,
     studyZoneService: StudyZoneService,
@@ -18,6 +20,7 @@ fun Application.configureRouting(
     speciesZoneService: SpeciesZoneService
 ) {
     routing {
+        authRoutes(authService)
         homeRoutes(projectService)
         userRoutes(userService)
         projectRoutes(projectService)

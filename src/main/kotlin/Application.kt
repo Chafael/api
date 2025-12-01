@@ -26,6 +26,7 @@ fun Application.module() {
     val speciesZoneRepository = SpeciesZoneRepositoryImpl()
 
     // 3. Crear TODOS los servicios (ACTUALIZADOS con dependencias)
+    val authService = AuthService(userRepository) // ← NUEVO
     val userService = UserService(userRepository)
     val projectService = ProjectService(projectRepository, studyZoneRepository)
     val studyZoneService = StudyZoneService(studyZoneRepository, speciesZoneRepository)
@@ -35,6 +36,7 @@ fun Application.module() {
 
     // 4. Configurar rutas
     configureRouting(
+        authService,  // ← NUEVO (añadir como primer parámetro)
         userService,
         projectService,
         studyZoneService,
