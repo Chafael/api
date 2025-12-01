@@ -3,13 +3,9 @@ package com.sylvara.plugins
 import com.sylvara.application.routes.*
 import com.sylvara.application.services.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.*
 import io.ktor.server.routing.*
 
-/**
- * Configuración central de todas las rutas de la aplicación.
- * Este archivo actúa como orquestador que delega a cada módulo de rutas.
- */
 fun Application.configureRouting(
     authService: AuthService,
     userService: UserService,
@@ -20,19 +16,22 @@ fun Application.configureRouting(
     speciesZoneService: SpeciesZoneService
 ) {
     routing {
-        authRoutes(authService)
-        homeRoutes(projectService)
-        userRoutes(userService)
-        projectRoutes(projectService)
-        studyZoneRoutes(studyZoneService)
-        functionalTypeRoutes(functionalTypeService)
-        speciesRoutes(speciesService)
-        speciesZoneRoutes(speciesZoneService)
-        projectDetailsRoutes(projectService, studyZoneService)
-        studyZoneDetailsRoutes(studyZoneService)
-        biodiversityAnalysisRoutes(studyZoneService)
-        speciesRegistryRoutes(speciesService)
-        userConfigurationRoutes(userService)
 
+        authRoutes(authService)
+
+        authenticate("auth-jwt") {
+            homeRoutes(projectService)
+            userRoutes(userService)
+            projectRoutes(projectService)
+            studyZoneRoutes(studyZoneService)
+            functionalTypeRoutes(functionalTypeService)
+            speciesRoutes(speciesService)
+            speciesZoneRoutes(speciesZoneService)
+            projectDetailsRoutes(projectService, studyZoneService)
+            studyZoneDetailsRoutes(studyZoneService)
+            biodiversityAnalysisRoutes(studyZoneService)
+            speciesRegistryRoutes(speciesService)
+            userConfigurationRoutes(userService)
+        }
     }
 }
