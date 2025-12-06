@@ -49,16 +49,13 @@ class SpeciesService(
         speciesRepository.delete(id)
     }
 
-    // Crear especie completa con relación a zona
     suspend fun createCompleteSpecies(request: CreateSpeciesRequest): Pair<Species, SpeciesZone> {
-        // Validar tipo funcional existe
         val functionalType = functionalTypeRepository.findById(request.functionalTypeId)
             ?: throw NotFoundException("Tipo funcional con ID ${request.functionalTypeId} no encontrado")
 
-        // Crear especie
         val newSpecies = Species(
             projectId = request.projectId,
-            speciesName = request.speciesName,
+            speciesName = request.speciesName, // ← CAMBIO AQUÍ
             speciesPhoto = request.speciesPhoto,
             functionalTypeId = request.functionalTypeId
         )
