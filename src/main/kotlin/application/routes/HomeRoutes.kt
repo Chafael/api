@@ -9,8 +9,6 @@ import io.ktor.server.routing.*
 
 fun Routing.homeRoutes(projectService: ProjectService) {
     route("/home") {
-
-        // GET: Obtener estadísticas del home
         get {
             try {
                 val stats = projectService.getHomeStats()

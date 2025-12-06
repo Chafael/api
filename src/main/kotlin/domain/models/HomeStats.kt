@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 data class HomeStats(
     val activeProjects: List<ActiveProjectInfo>,
     val totalProjects: Int,
-    val monthlyProjects: Int
+    val monthlyProjects: Int,
+    val totalAnalysis: Int = 0,
+    val analysisThisMonth: Int = 0
 )
 
 @Serializable

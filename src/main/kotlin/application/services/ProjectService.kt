@@ -4,6 +4,7 @@ import com.sylvara.domain.models.*
 import com.sylvara.domain.ports.ProjectRepository
 import com.sylvara.domain.ports.StudyZoneRepository
 import io.ktor.server.plugins.*
+import java.time.LocalDateTime
 
 class ProjectService(
     private val projectRepository: ProjectRepository,
@@ -46,7 +47,7 @@ class ProjectService(
         projectRepository.delete(id)
     }
 
-    // MÉTODO PARA HOME
+    // ✅ MÉTODO ACTUALIZADO PARA HOME CON ANÁLISIS
     suspend fun getHomeStats(): HomeStats {
         val activeProjects = projectRepository.findActiveProjects()
 
@@ -59,14 +60,37 @@ class ProjectService(
             )
         }
 
+        // ✅ CALCULAR ANÁLISIS (zonas de estudio con especies registradas)
+        val allZones = studyZoneRepository.findAll()
+
+        // Total de análisis = zonas que tienen al menos 1 especie
+        val totalAnalysis = allZones.count { zone ->
+            studyZoneRepository.countSpeciesInZone(zone.studyZoneId) > 0
+        }
+
+        // Análisis de este mes = zonas creadas este mes con especies
+        val thisMonthStart = LocalDateTime.now()
+            .withDayOfMonth(1)
+            .withHour(0)
+            .withMinute(0)
+            .withSecond(0)
+
+        val analysisThisMonth = allZones.count { zone ->
+            zone.createdAt != null &&
+                    zone.createdAt!! >= thisMonthStart &&
+                    studyZoneRepository.countSpeciesInZone(zone.studyZoneId) > 0
+        }
+
         return HomeStats(
             activeProjects = activeProjectsInfo,
             totalProjects = projectRepository.countAll(),
-            monthlyProjects = projectRepository.countThisMonth()
+            monthlyProjects = projectRepository.countThisMonth(),
+            totalAnalysis = totalAnalysis,
+            analysisThisMonth = analysisThisMonth
         )
     }
 
-    // NUEVO MÉTODO PARA DETALLES DEL PROYECTO
+    // MÉTODO PARA DETALLES DEL PROYECTO
     suspend fun getProjectDetails(projectId: Int): ProjectDetails {
         val project = projectRepository.findById(projectId)
             ?: throw NotFoundException("Proyecto con ID $projectId no encontrado")
@@ -91,7 +115,7 @@ class ProjectService(
         )
     }
 
-    // Metodo para actualizar el nombre y la descripcion del proyecto
+    // Método para actualizar el nombre y la descripción del proyecto
     suspend fun updateProjectBasicInfo(id: Int, name: String, description: String?): Project {
         val existingProject = projectRepository.findById(id)
             ?: throw NotFoundException("Proyecto con ID $id no encontrado")
