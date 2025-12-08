@@ -1,5 +1,6 @@
 package com.sylvara.data.postgres
 
+import com.sylvara.infrastructure.schemas.UserTable
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime

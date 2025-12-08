@@ -1,4 +1,4 @@
-package com.sylvara.data.postgres
+package com.sylvara.infrastructure.schemas
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.date

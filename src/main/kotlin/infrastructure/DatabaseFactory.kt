@@ -1,6 +1,7 @@
 package com.sylvara.infrastructure
 
 import com.sylvara.data.postgres.*
+import com.sylvara.infrastructure.schemas.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database

@@ -1,11 +1,14 @@
 package com.sylvara.infrastructure.adapters
 
-import com.sylvara.data.postgres.UserTable
+import com.sylvara.infrastructure.schemas.UserTable
 import com.sylvara.domain.models.User
 import com.sylvara.domain.ports.UserRepository
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import com.sylvara.domain.models.UpdateUserProfileRequest
+import org.jetbrains.exposed.sql.update // Importar update
+import com.sylvara.infrastructure.dbQuery
 
 class UserRepositoryImpl : UserRepository {
     // Mapper
@@ -82,5 +85,19 @@ class UserRepositoryImpl : UserRepository {
         return transaction {
             UserTable.deleteWhere { UserTable.id eq id }
         }
+    }
+
+    override suspend fun updateProfile(userId: Int, request: UpdateUserProfileRequest): Boolean = dbQuery {
+        UserTable.update({ UserTable.id eq userId }) {
+            it[UserTable.name] = request.userName
+            it[UserTable.lastname] = request.userLastname
+            it[UserTable.biography] = request.biography
+        } > 0
+    }
+
+    override suspend fun deleteBiography(userId: Int): Boolean = dbQuery {
+        UserTable.update({ UserTable.id eq userId }) {
+            it[UserTable.biography] = null
+        } > 0
     }
 }

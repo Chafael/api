@@ -7,6 +7,7 @@ import com.sylvara.infrastructure.security.PasswordHasher
 import io.ktor.server.plugins.*
 import java.time.LocalDate
 import java.time.Period
+import com.sylvara.domain.models.UpdateUserProfileRequest
 
 class UserService(private val userRepository: UserRepository) {
 
@@ -77,6 +78,19 @@ class UserService(private val userRepository: UserRepository) {
             age = age,
             birthday = user.userBirthday
         )
+    }
+
+    suspend fun updateProfile(userId: Int, request: UpdateUserProfileRequest): UserProfile {
+        val success = userRepository.updateProfile(userId, request)
+        if (!success) {
+            throw NotFoundException("Usuario con ID $userId no encontrado.")
+        }
+
+        return getUserProfile(userId)
+    }
+
+    suspend fun deleteBiography(userId: Int): Boolean {
+        return userRepository.deleteBiography(userId)
     }
 
     private fun calculateAge(birthDate: LocalDate): Int {
