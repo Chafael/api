@@ -13,7 +13,6 @@ import io.ktor.server.routing.*
 fun Routing.speciesRegistryRoutes(speciesService: SpeciesService) {
     route("/species-registry/zone/{zoneId}") {
 
-        // GET: Datos de cada especie (Nombre, unidad de muestreo, tipo funcional,
         get {
             val zoneId = call.parameters["zoneId"]?.toIntOrNull()
             if (zoneId == null) {
@@ -32,7 +31,6 @@ fun Routing.speciesRegistryRoutes(speciesService: SpeciesService) {
             }
         }
 
-        // POST: Registro de especie completo
         post {
             val zoneId = call.parameters["zoneId"]?.toIntOrNull()
             if (zoneId == null) {
@@ -43,7 +41,6 @@ fun Routing.speciesRegistryRoutes(speciesService: SpeciesService) {
             try {
                 val request = call.receive<CreateSpeciesRequest>()
 
-                // Validar que el zoneId coincida
                 if (request.studyZoneId != zoneId) {
                     call.respond(
                         HttpStatusCode.BadRequest,
@@ -53,10 +50,7 @@ fun Routing.speciesRegistryRoutes(speciesService: SpeciesService) {
                 }
 
                 val (species, speciesZone) = speciesService.createCompleteSpecies(request)
-                call.respond(
-                    HttpStatusCode.Created,
-                    mapOf("species" to species, "speciesZone" to speciesZone)
-                )
+                call.respond(HttpStatusCode.Created, species)
             } catch (e: IllegalArgumentException) {
                 call.respond(HttpStatusCode.BadRequest, mapOf("error" to e.message))
             } catch (e: NotFoundException) {
@@ -69,7 +63,6 @@ fun Routing.speciesRegistryRoutes(speciesService: SpeciesService) {
             }
         }
 
-        // PUT: Actualizar especie
         put("/{speciesId}") {
             val zoneId = call.parameters["zoneId"]?.toIntOrNull()
             val speciesId = call.parameters["speciesId"]?.toIntOrNull()
@@ -86,10 +79,7 @@ fun Routing.speciesRegistryRoutes(speciesService: SpeciesService) {
                     zoneId,
                     request
                 )
-                call.respond(
-                    HttpStatusCode.OK,
-                    mapOf("species" to species, "speciesZone" to speciesZone)
-                )
+                call.respond(HttpStatusCode.OK, species)
             } catch (e: NotFoundException) {
                 call.respond(HttpStatusCode.NotFound, mapOf("error" to e.message))
             } catch (e: IllegalArgumentException) {
@@ -102,7 +92,6 @@ fun Routing.speciesRegistryRoutes(speciesService: SpeciesService) {
             }
         }
 
-        // DELETE: Eliminar especie
         delete("/{speciesId}") {
             val zoneId = call.parameters["zoneId"]?.toIntOrNull()
             val speciesId = call.parameters["speciesId"]?.toIntOrNull()

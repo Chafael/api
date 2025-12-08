@@ -46,6 +46,12 @@ class SpeciesService(
         if (!exists) {
             throw NotFoundException("Especie con ID $id no existe")
         }
+
+        val speciesZones = speciesZoneRepository.findBySpeciesId(id)
+        speciesZones.forEach { speciesZone ->
+            speciesZoneRepository.delete(speciesZone.speciesZoneId)
+        }
+
         speciesRepository.delete(id)
     }
 
@@ -61,7 +67,6 @@ class SpeciesService(
         )
         val savedSpecies = speciesRepository.save(newSpecies)
 
-        // Crear relación con zona
         val speciesZone = SpeciesZone(
             speciesId = savedSpecies.speciesId,
             studyZoneId = request.studyZoneId,
@@ -74,7 +79,6 @@ class SpeciesService(
         return Pair(savedSpecies, savedZone)
     }
 
-    //  Obtener detalles de especies por zona
     suspend fun getSpeciesDetailsByZone(studyZoneId: Int): List<SpeciesDetail> {
         val speciesZones = speciesZoneRepository.findByStudyZoneId(studyZoneId)
 
@@ -97,7 +101,6 @@ class SpeciesService(
         }
     }
 
-    //  Actualizar especie y su relación con zona
     suspend fun updateCompleteSpecies(
         speciesId: Int,
         studyZoneId: Int,
@@ -106,7 +109,6 @@ class SpeciesService(
         val existingSpecies = speciesRepository.findById(speciesId)
             ?: throw NotFoundException("Especie con ID $speciesId no encontrada")
 
-        // Actualizar especie
         val updatedSpecies = existingSpecies.copy(
             speciesName = request.speciesName,
             speciesPhoto = request.speciesPhoto,
@@ -114,7 +116,6 @@ class SpeciesService(
         )
         val savedSpecies = speciesRepository.update(updatedSpecies)
 
-        // Buscar y actualizar relación con zona
         val speciesZones = speciesZoneRepository.findBySpeciesId(speciesId)
         val existingZone = speciesZones.find { it.studyZoneId == studyZoneId }
             ?: throw NotFoundException("Relación especie-zona no encontrada")
