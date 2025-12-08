@@ -6,7 +6,8 @@ import java.time.LocalDate
 @Serializable
 data class UserProfile(
     val userId: Int,
-    val fullName: String,
+    val userName: String,
+    val userLastname: String,
     val biography: String?,
     val email: String,
     val age: Int,
@@ -18,9 +19,9 @@ data class UserProfile(
 data class UpdateUserProfileRequest(
     val userName: String,
     val userLastname: String,
-    val biography: String?,
-    val userEmail: String,
+    val userBiography: String? = null,
+    val userEmail: String? = null,
     @Serializable(with = LocalDateSerializer::class)
-    val userBirthday: LocalDate,
-    val userPassword: String
+    val userBirthday: LocalDate? = null,
+    val userPassword: String? = null
 )

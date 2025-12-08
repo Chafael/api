@@ -91,7 +91,7 @@ class UserRepositoryImpl : UserRepository {
         UserTable.update({ UserTable.id eq userId }) {
             it[UserTable.name] = request.userName
             it[UserTable.lastname] = request.userLastname
-            it[UserTable.biography] = request.biography
+            it[UserTable.biography] = request.userBiography
         } > 0
     }
 

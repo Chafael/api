@@ -72,7 +72,8 @@ class UserService(private val userRepository: UserRepository) {
 
         return UserProfile(
             userId = user.userId,
-            fullName = "${user.userName} ${user.userLastname}",
+            userName = user.userName,
+            userLastname = user.userLastname,
             biography = user.biography,
             email = user.userEmail,
             age = age,

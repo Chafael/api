@@ -24,7 +24,8 @@ fun Route.userConfigurationRoutes(userService: UserService) {
             // 3.- Email
             // 4.- Edad
             get {
-                val userId = call.parameters["userId"]?.toIntOrNull()
+                val principal = call.principal<JWTPrincipal>()
+                val userId = principal?.payload?.getClaim("userId")?.asInt()
                 if (userId == null) {
                     call.respond(HttpStatusCode.BadRequest, "El userId debe ser un número")
                     return@get
