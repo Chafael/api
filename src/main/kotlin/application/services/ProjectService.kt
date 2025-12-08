@@ -46,7 +46,7 @@ class ProjectService(
         projectRepository.delete(id)
     }
 
-    // MÉTODO PARA HOME
+    // MÉTODO ANTIGUO PARA HOME (sin filtrar por usuario)
     suspend fun getHomeStats(): HomeStats {
         val activeProjects = projectRepository.findActiveProjects()
 
@@ -63,6 +63,43 @@ class ProjectService(
             activeProjects = activeProjectsInfo,
             totalProjects = projectRepository.countAll(),
             monthlyProjects = projectRepository.countThisMonth()
+        )
+    }
+
+    // NUEVO MÉTODO PARA HOME FILTRADO POR USUARIO
+    suspend fun getHomeStatsByUser(userId: Int): UserHomeStats {
+        // Obtener solo proyectos del usuario
+        val userProjects = projectRepository.findByUserId(userId)
+
+        // Contar proyectos totales del usuario
+        val totalProjects = userProjects.size
+
+        // Contar proyectos activos del usuario
+        val activeProjects = userProjects.filter { it.projectStatus == "activo" }
+
+        // Contar zonas de estudio totales del usuario
+        var totalStudyZones = 0
+        userProjects.forEach { project ->
+            val zones = studyZoneRepository.findByProjectId(project.projectId)
+            totalStudyZones += zones.size
+        }
+
+        // Preparar información de proyectos activos
+        val activeProjectsInfo = activeProjects.map { project ->
+            val zones = studyZoneRepository.findByProjectId(project.projectId)
+            UserActiveProjectInfo(
+                projectName = project.projectName,
+                projectStatus = project.projectStatus,
+                totalStudyZones = zones.size
+            )
+        }
+
+        return UserHomeStats(
+            totalProjects = totalProjects,
+            monthlyProjects = 0, // Puedes implementar esto si tienes el campo createdAt
+            totalAnalysis = totalStudyZones,
+            analysisThisMonth = 0, // Puedes implementar esto si lo necesitas
+            activeProjects = activeProjectsInfo
         )
     }
 

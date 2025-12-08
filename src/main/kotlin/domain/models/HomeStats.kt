@@ -1,4 +1,4 @@
-  package com.sylvara.domain.models
+package com.sylvara.domain.models
 
 import kotlinx.serialization.Serializable
 
@@ -11,6 +11,22 @@ data class HomeStats(
 
 @Serializable
 data class ActiveProjectInfo(
+    val projectName: String,
+    val projectStatus: String,
+    val totalStudyZones: Int
+)
+
+@Serializable
+data class UserHomeStats(
+    val totalProjects: Int,
+    val monthlyProjects: Int,
+    val totalAnalysis: Int,
+    val analysisThisMonth: Int,
+    val activeProjects: List<UserActiveProjectInfo>
+)
+
+@Serializable
+data class UserActiveProjectInfo(
     val projectName: String,
     val projectStatus: String,
     val totalStudyZones: Int
