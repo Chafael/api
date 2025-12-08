@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.plugin.serialization)
+    id("com.google.devtools.ksp") version "2.2.20-2.0.3"
 }
 
 group = "com.sylvara"

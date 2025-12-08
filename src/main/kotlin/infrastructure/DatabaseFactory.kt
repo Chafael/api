@@ -29,7 +29,7 @@ object DatabaseFactory {
         config.driverClassName = "org.postgresql.Driver"
         config.jdbcUrl = "jdbc:postgresql://localhost:5432/sylvara_db"
         config.username = "postgres"
-        config.password = "password"
+        config.password = "301416"
         config.maximumPoolSize = 3
         config.isAutoCommit = false
         config.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
