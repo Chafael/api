@@ -1,4 +1,4 @@
-package com.sylvara.domain.models
+  package com.sylvara.domain.models
 
 import kotlinx.serialization.Serializable
 
