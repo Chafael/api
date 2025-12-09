@@ -4,6 +4,16 @@ plugins {
     alias(libs.plugins.kotlin.plugin.serialization)
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+// --- FIN DE LA CORRECCIÓN ---
+
 group = "com.sylvara"
 version = "0.0.1"
 val exposed_version = "0.56.0"
@@ -39,6 +49,4 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.2")
 
     implementation("org.mindrot:jbcrypt:0.4")
-
-
 }
