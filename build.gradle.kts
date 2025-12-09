@@ -45,4 +45,9 @@ dependencies {
 
     implementation("org.mindrot:jbcrypt:0.4")
 }
-// FORZANDO ACTUALIZACION DE JAVA - INTENTO FINAL
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
