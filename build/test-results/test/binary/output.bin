@@ -1,0 +1,9 @@
+ù23:50:00.110 [DefaultDispatcher-worker-2 @call-context#3] INFO  io.ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+!üîí CONFIGURANDO SEGURIDAD JWT
+‚úÖ SEGURIDAD JWT CONFIGURADA
+~23:50:00.420 [DefaultDispatcher-worker-2 @coroutine#4] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+¨23:50:00.659 [DefaultDispatcher-worker-2 @coroutine#4] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@13f3c506
+É23:50:00.662 [DefaultDispatcher-worker-2 @coroutine#4] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+v23:50:00.919 [DefaultDispatcher-worker-2 @call-context#3] INFO  io.ktor.test - Application started in 0.825 seconds.
+o23:50:00.923 [DefaultDispatcher-worker-3 @coroutine#5] INFO  io.ktor.test - Responding at http://localhost:80
+q23:50:00.923 [DefaultDispatcher-worker-3 @coroutine#5] INFO  io.ktor.test - Responding at https://localhost:443

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sylvara.ApplicationTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-12-10T05:49:59.199Z" hostname="VICTUSOFMOI" time="1.804">
+  <properties/>
+  <testcase name="testRoot" classname="com.sylvara.ApplicationTest" time="1.804">
+    <failure message="java.lang.AssertionError: expected:&lt;200 OK&gt; but was:&lt;404 Not Found&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;200 OK&gt; but was:&lt;404 Not Found&gt;
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at kotlin.test.junit.JUnitAsserter.assertEquals(JUnitSupport.kt:32)
+	at kotlin.test.AssertionsKt__AssertionsKt.assertEquals(Assertions.kt:63)
+	at kotlin.test.AssertionsKt.assertEquals(Unknown Source)
+	at kotlin.test.AssertionsKt__AssertionsKt.assertEquals$default(Assertions.kt:62)
+	at kotlin.test.AssertionsKt.assertEquals$default(Unknown Source)
+	at com.sylvara.ApplicationTest$testRoot$1.invokeSuspend(ApplicationTest.kt:17)
+	at _COROUTINE._BOUNDARY._(CoroutineDebugging.kt:42)
+	at io.ktor.server.testing.TestApplicationKt.runTestApplication(TestApplication.kt:522)
+	at io.ktor.server.testing.TestApplicationKt$testApplication$1.invokeSuspend(TestApplication.kt:506)
+	at io.ktor.test.dispatcher.TestCommonKt$runTestWithRealTime$1.invokeSuspend(TestCommon.kt:40)
+	at kotlinx.coroutines.test.TestBuildersKt__TestBuildersKt$runTest$2$1$1.invokeSuspend(TestBuilders.kt:317)
+Caused by: java.lang.AssertionError: expected:&lt;200 OK&gt; but was:&lt;404 Not Found&gt;
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at kotlin.test.junit.JUnitAsserter.assertEquals(JUnitSupport.kt:32)
+	at kotlin.test.AssertionsKt__AssertionsKt.assertEquals(Assertions.kt:63)
+	at kotlin.test.AssertionsKt.assertEquals(Unknown Source)
+	at kotlin.test.AssertionsKt__AssertionsKt.assertEquals$default(Assertions.kt:62)
+	at kotlin.test.AssertionsKt.assertEquals$default(Unknown Source)
+	at com.sylvara.ApplicationTest$testRoot$1.invokeSuspend(ApplicationTest.kt:17)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:124)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:586)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:829)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:717)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:704)
+</failure>
+  </testcase>
+  <system-out><![CDATA[23:50:00.110 [DefaultDispatcher-worker-2 @call-context#3] INFO  io.ktor.test - No ktor.deployment.watch patterns specified, automatic reload is not active.
+]]>&#x1f512;<![CDATA[ CONFIGURANDO SEGURIDAD JWT
+✅ SEGURIDAD JWT CONFIGURADA
+23:50:00.420 [DefaultDispatcher-worker-2 @coroutine#4] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+23:50:00.659 [DefaultDispatcher-worker-2 @coroutine#4] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@13f3c506
+23:50:00.662 [DefaultDispatcher-worker-2 @coroutine#4] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+23:50:00.919 [DefaultDispatcher-worker-2 @call-context#3] INFO  io.ktor.test - Application started in 0.825 seconds.
+23:50:00.923 [DefaultDispatcher-worker-3 @coroutine#5] INFO  io.ktor.test - Responding at http://localhost:80
+23:50:00.923 [DefaultDispatcher-worker-3 @coroutine#5] INFO  io.ktor.test - Responding at https://localhost:443
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

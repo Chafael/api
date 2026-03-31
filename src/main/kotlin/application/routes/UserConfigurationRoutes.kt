@@ -9,10 +9,6 @@ import io.ktor.server.routing.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.server.auth.* // ✅ Requerido para 'authenticate' y 'call.principal'
-import io.ktor.server.auth.jwt.* // ✅ Requerido para 'JWTPrincipal'
-import io.ktor.server.plugins.* // ✅ Requerido para 'BadRequestException' y 'NotFoundException'
-import io.ktor.server.request.* // ✅ Requerido para 'call.receive'
 
 fun Route.userConfigurationRoutes(userService: UserService) {
     authenticate("auth-jwt") {
@@ -55,7 +51,7 @@ fun Route.userConfigurationRoutes(userService: UserService) {
                 val principal = call.principal<JWTPrincipal>()
                 val jwtUserId = principal?.payload?.getClaim("userId")?.asInt()
 
-                if (jwtUserId != userId) { // Validación de seguridad: solo puede editar su propio perfil
+                if (jwtUserId != userId) {
                     call.respond(HttpStatusCode.Forbidden, mapOf("error" to "Acceso denegado: Intento de modificar otro perfil"))
                     return@put
                 }
